@@ -1,4 +1,4 @@
-package com.concrete.kotlinapi
+package com.devlhse.kotlinapi
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

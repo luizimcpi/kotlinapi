@@ -1,7 +1,7 @@
-package com.concrete.kotlinapi.controller
+package com.devlhse.kotlinapi.controller
 
-import com.concrete.kotlinapi.model.ContactDto
-import com.concrete.kotlinapi.service.ContactService
+import com.devlhse.kotlinapi.model.ContactDto
+import com.devlhse.kotlinapi.service.ContactService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping

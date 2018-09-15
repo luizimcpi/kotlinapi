@@ -1,6 +1,6 @@
-package com.concrete.kotlinapi.repository
+package com.devlhse.kotlinapi.repository
 
-import com.concrete.kotlinapi.model.ContactDocument
+import com.devlhse.kotlinapi.model.ContactDocument
 import org.springframework.data.mongodb.repository.MongoRepository
 
 interface ContactRepository: MongoRepository<ContactDocument, String> {

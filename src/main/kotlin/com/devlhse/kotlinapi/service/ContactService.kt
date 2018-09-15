@@ -1,8 +1,8 @@
-package com.concrete.kotlinapi.service
+package com.devlhse.kotlinapi.service
 
-import com.concrete.kotlinapi.model.ContactDocument
-import com.concrete.kotlinapi.model.ContactDto
-import com.concrete.kotlinapi.repository.ContactRepository
+import com.devlhse.kotlinapi.model.ContactDocument
+import com.devlhse.kotlinapi.model.ContactDto
+import com.devlhse.kotlinapi.repository.ContactRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -16,7 +16,7 @@ class ContactService {
         val contacts = contactRepository.findAll()
         var contactsDto: MutableList<ContactDto> = mutableListOf()
         for (contactDocument in contacts){
-            var contactDto = ContactDto(contactDocument.id, contactDocument.name, contactDocument.email, contactDocument.phoneNumber, contactDocument.creationDate )
+            var contactDto = ContactDto(contactDocument.id, contactDocument.name, contactDocument.email, contactDocument.phoneNumber, contactDocument.creationDate)
             contactsDto.add(contactDto)
         }
         return contactsDto
