@@ -27,5 +27,9 @@ class ContactService {
         return contactRepository.insert(contactDocument)
     }
 
+    fun delete(id: String) {
+        return contactRepository.deleteById(id)
+    }
+
 
 }

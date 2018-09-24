@@ -1,6 +1,4 @@
 spring:
   data:
-    mongodb.host: localhost
-    mongodb.port: 27017
-    mongodb.uri: mongodb://localhost/contacts
+    mongodb.uri: mongodb://luiz:dixm3591@18.228.87.219:27017/contacts
     mongo.repositories.enabled: true
