@@ -1,5 +1,6 @@
 package com.devlhse.kotlinapi.controller
 
+import com.devlhse.kotlinapi.exception.UserNotFoundException
 import com.devlhse.kotlinapi.model.ContactDto
 import com.devlhse.kotlinapi.service.ContactService
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,6 +14,12 @@ class ContactController {
     @Autowired
     private lateinit var contactService: ContactService
 
+    @Throws(UserNotFoundException::class)
+    @GetMapping("/contacts/{id}")
+    fun getContactById(@PathVariable("id") id: String): ResponseEntity<ContactDto> {
+        return ResponseEntity.ok().body(contactService.findOneContact(id))
+    }
+
     @GetMapping("/contacts")
     fun getContacts(): ResponseEntity<List<ContactDto>> {
         return ResponseEntity.ok().body(contactService.findAllContacts())
@@ -24,6 +31,7 @@ class ContactController {
         return ResponseEntity.created(URI("/contacts")).body("Inserted")
     }
 
+    @Throws(UserNotFoundException::class)
     @DeleteMapping("/contacts/{id}")
     fun deleteContact(@PathVariable("id") id: String): ResponseEntity<String> {
         contactService.delete(id)
