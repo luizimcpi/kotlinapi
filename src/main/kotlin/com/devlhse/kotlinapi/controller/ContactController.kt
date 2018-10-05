@@ -16,7 +16,7 @@ class ContactController {
 
     @Throws(UserNotFoundException::class)
     @GetMapping("/contacts/{id}")
-    fun getContactById(@PathVariable("id") id: String): ResponseEntity<ContactDto> {
+    fun getContactById(@PathVariable("id") id: Long): ResponseEntity<ContactDto> {
         return ResponseEntity.ok().body(contactService.findOneContact(id))
     }
 
@@ -31,9 +31,15 @@ class ContactController {
         return ResponseEntity.created(URI("/contacts")).body("Inserted")
     }
 
+    @PutMapping("/contacts/{id}")
+    fun updateContact(@RequestBody contactDto: ContactDto, @PathVariable("id") id: Long): ResponseEntity<String> {
+        contactService.update(contactDto, id)
+        return ResponseEntity.ok().body("Updated")
+    }
+
     @Throws(UserNotFoundException::class)
     @DeleteMapping("/contacts/{id}")
-    fun deleteContact(@PathVariable("id") id: String): ResponseEntity<String> {
+    fun deleteContact(@PathVariable("id") id: Long): ResponseEntity<String> {
         contactService.delete(id)
         return ResponseEntity.ok().body("Deleted")
     }

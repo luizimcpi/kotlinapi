@@ -5,6 +5,7 @@ import com.devlhse.kotlinapi.model.ContactDocument
 import com.devlhse.kotlinapi.model.ContactDto
 import com.devlhse.kotlinapi.repository.ContactRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
 
 @Service
@@ -14,7 +15,7 @@ class ContactService {
     private lateinit var contactRepository: ContactRepository
 
     @Throws(UserNotFoundException::class)
-    fun findOneContact(id: String): ContactDto {
+    fun findOneContact(id: Long): ContactDto {
         val contactDocument = contactRepository.findById(id)
         if(contactDocument.isPresent) {
             return ContactDto(
@@ -45,8 +46,19 @@ class ContactService {
     }
 
     fun create(contactDto: ContactDto): ContactDocument {
+        var lastContactDocument: ContactDocument
+        var nextId: Long = 0
+
+        try{
+            lastContactDocument = contactRepository.findFirstByOrderByIdDesc()
+            nextId = lastContactDocument.id
+            nextId++
+        }catch (e: EmptyResultDataAccessException){
+            nextId++
+        }
+
         var contactDocument = ContactDocument(
-                contactDto.id,
+                nextId,
                 contactDto.name,
                 contactDto.email,
                 contactDto.phoneNumber
@@ -54,8 +66,20 @@ class ContactService {
         return contactRepository.insert(contactDocument)
     }
 
+    fun update(contactDto: ContactDto, id: Long): ContactDocument {
+
+        var contactDocument = contactRepository.findById(id)
+
+        if(contactDocument.isPresent) {
+            contactRepository.deleteById(id)
+            var alteredContact = ContactDocument(contactDto.id, contactDto.name, contactDto.email, contactDto.phoneNumber)
+            return contactRepository.save(alteredContact)
+        }
+        throw UserNotFoundException("User not found.")
+    }
+
     @Throws(UserNotFoundException::class)
-    fun delete(id: String) {
+    fun delete(id: Long) {
         val contactDocument = contactRepository.findById(id)
         if(contactDocument.isPresent) {
             return contactRepository.deleteById(id)

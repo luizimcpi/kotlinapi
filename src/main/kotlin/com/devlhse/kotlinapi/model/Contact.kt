@@ -6,23 +6,16 @@ import java.time.LocalDateTime
 import java.util.*
 
 data class ContactDto(
-        var id:String = UUID.randomUUID().toString(),
+        var id:Long = 0,
         var name:String,
         var email:String,
         var phoneNumber: String,
         var creationDate: LocalDateTime?
 )
 
-data class ContactModel(
-        var name:String,
-        var email:String,
-        var phoneNumber: String,
-        val creationDate: LocalDateTime
-)
-
 @Document(collection = "contact")
 data class ContactDocument(
-        @Id var id:String,
+        @Id var id:Long,
         var name:String,
         var email:String,
         var phoneNumber: String,
