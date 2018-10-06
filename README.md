@@ -19,6 +19,18 @@ http://localhost:8080/contacts
 }
 ```
 
+PUT EXAMPLE:
+
+```
+http://localhost:8080/contacts/{id}
+
+{
+	"name":"Luiz Henrique",
+	"email":"luiz@gmail.com",
+	"phoneNumber":"(13)3333-3333"
+}
+```
+
 GET ONE CONTACT EXAMPLE:
 
 ```

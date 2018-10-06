@@ -7,6 +7,7 @@ import com.devlhse.kotlinapi.repository.ContactRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class ContactService {
@@ -16,14 +17,15 @@ class ContactService {
 
     @Throws(UserNotFoundException::class)
     fun findOneContact(id: Long): ContactDto {
-        val contactDocument = contactRepository.findById(id)
-        if(contactDocument.isPresent) {
+        if(contactRepository.existsById(id)) {
+            val contactDocument = contactRepository.findById(id)
             return ContactDto(
                     id = contactDocument.get().id,
                     name = contactDocument.get().name,
                     email = contactDocument.get().email,
                     phoneNumber = contactDocument.get().phoneNumber,
-                    creationDate = contactDocument.get().creationDate
+                    createdAt = contactDocument.get().createdAt,
+                    updatedAt = contactDocument.get().updatedAt
             )
         }
         throw UserNotFoundException("User not found.")
@@ -38,7 +40,8 @@ class ContactService {
                     contactDocument.name,
                     contactDocument.email,
                     contactDocument.phoneNumber,
-                    contactDocument.creationDate
+                    contactDocument.createdAt,
+                    contactDocument.updatedAt
             )
             contactsDto.add(contactDto)
         }
@@ -58,21 +61,25 @@ class ContactService {
         }
 
         var contactDocument = ContactDocument(
-                nextId,
-                contactDto.name,
-                contactDto.email,
-                contactDto.phoneNumber
+                id = nextId,
+                name = contactDto.name,
+                email = contactDto.email,
+                phoneNumber = contactDto.phoneNumber,
+                createdAt = LocalDateTime.now()
         )
         return contactRepository.insert(contactDocument)
     }
 
     fun update(contactDto: ContactDto, id: Long): ContactDocument {
-
-        var contactDocument = contactRepository.findById(id)
-
-        if(contactDocument.isPresent) {
-            contactRepository.deleteById(id)
-            var alteredContact = ContactDocument(contactDto.id, contactDto.name, contactDto.email, contactDto.phoneNumber)
+        if(contactRepository.existsById(id)) {
+            var contactDocument = contactRepository.findById(id)
+            var alteredContact = ContactDocument(
+                    id = id,
+                    name = contactDto.name,
+                    email = contactDto.email,
+                    phoneNumber = contactDto.phoneNumber,
+                    createdAt = contactDocument.get().createdAt,
+                    updatedAt = LocalDateTime.now())
             return contactRepository.save(alteredContact)
         }
         throw UserNotFoundException("User not found.")
@@ -80,8 +87,7 @@ class ContactService {
 
     @Throws(UserNotFoundException::class)
     fun delete(id: Long) {
-        val contactDocument = contactRepository.findById(id)
-        if(contactDocument.isPresent) {
+        if(contactRepository.existsById(id)) {
             return contactRepository.deleteById(id)
         }
         throw UserNotFoundException("User not found.")

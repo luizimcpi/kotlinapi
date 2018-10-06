@@ -24,7 +24,7 @@ class ContactControllerTest {
     @Test
     fun shouldShowAllContactsWithSuccess(){
         val contactDto = ContactDto(
-                id = "valid_id",
+                id = 1,
                 name = "valid_user",
                 email = "valid_email",
                 phoneNumber = "valid_phone_number",
@@ -38,13 +38,13 @@ class ContactControllerTest {
     @Test
     fun shouldFindSpecificContactWithSuccess(){
         val contactDto = ContactDto(
-                id = "valid_id",
+                id = 1,
                 name = "valid_user",
                 email = "valid_email",
                 phoneNumber = "valid_phone_number",
                 creationDate = LocalDateTime.now()
         )
-        `when`(contactService.findOneContact("valid_id")).thenReturn(contactDto)
-        Assert.assertNotNull(contactController.getContactById("valid_id"))
+        `when`(contactService.findOneContact(1)).thenReturn(contactDto)
+        Assert.assertNotNull(contactController.getContactById(1))
     }
 }
