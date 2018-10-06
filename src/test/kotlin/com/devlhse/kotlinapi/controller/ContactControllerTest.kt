@@ -9,7 +9,6 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.runners.MockitoJUnitRunner
-import java.time.LocalDateTime
 
 
 @RunWith(MockitoJUnitRunner::class)
@@ -28,7 +27,8 @@ class ContactControllerTest {
                 name = "valid_user",
                 email = "valid_email",
                 phoneNumber = "valid_phone_number",
-                creationDate = LocalDateTime.now()
+                createdAt = "03/03/1990",
+                updatedAt = "04/03/1990"
         )
         val validContactsList = listOf(contactDto)
         `when`(contactService.findAllContacts()).thenReturn(validContactsList)
@@ -42,7 +42,8 @@ class ContactControllerTest {
                 name = "valid_user",
                 email = "valid_email",
                 phoneNumber = "valid_phone_number",
-                creationDate = LocalDateTime.now()
+                createdAt = "03/03/1990",
+                updatedAt = "04/03/1990"
         )
         `when`(contactService.findOneContact(1)).thenReturn(contactDto)
         Assert.assertNotNull(contactController.getContactById(1))

@@ -4,10 +4,11 @@ import com.devlhse.kotlinapi.exception.UserNotFoundException
 import com.devlhse.kotlinapi.model.ContactDocument
 import com.devlhse.kotlinapi.model.ContactDto
 import com.devlhse.kotlinapi.repository.ContactRepository
+import com.devlhse.kotlinapi.utils.DateUtils
+import org.joda.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class ContactService {
@@ -24,8 +25,8 @@ class ContactService {
                     name = contactDocument.get().name,
                     email = contactDocument.get().email,
                     phoneNumber = contactDocument.get().phoneNumber,
-                    createdAt = contactDocument.get().createdAt,
-                    updatedAt = contactDocument.get().updatedAt
+                    createdAt = DateUtils.toSimpleString(contactDocument.get().createdAt!!),
+                    updatedAt = DateUtils.toSimpleString(contactDocument.get().updatedAt!!)
             )
         }
         throw UserNotFoundException("User not found.")
@@ -40,8 +41,8 @@ class ContactService {
                     contactDocument.name,
                     contactDocument.email,
                     contactDocument.phoneNumber,
-                    contactDocument.createdAt,
-                    contactDocument.updatedAt
+                    DateUtils.toSimpleString(contactDocument.createdAt!!),
+                    DateUtils.toSimpleString(contactDocument.updatedAt!!)
             )
             contactsDto.add(contactDto)
         }
@@ -65,7 +66,8 @@ class ContactService {
                 name = contactDto.name,
                 email = contactDto.email,
                 phoneNumber = contactDto.phoneNumber,
-                createdAt = LocalDateTime.now()
+                createdAt = LocalDateTime.now().toDate(),
+                updatedAt = LocalDateTime.now().toDate()
         )
         return contactRepository.insert(contactDocument)
     }
@@ -79,7 +81,7 @@ class ContactService {
                     email = contactDto.email,
                     phoneNumber = contactDto.phoneNumber,
                     createdAt = contactDocument.get().createdAt,
-                    updatedAt = LocalDateTime.now())
+                    updatedAt = LocalDateTime.now().toDate())
             return contactRepository.save(alteredContact)
         }
         throw UserNotFoundException("User not found.")
