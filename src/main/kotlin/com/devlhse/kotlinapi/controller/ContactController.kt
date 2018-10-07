@@ -1,6 +1,7 @@
 package com.devlhse.kotlinapi.controller
 
 import com.devlhse.kotlinapi.exception.UserNotFoundException
+import com.devlhse.kotlinapi.model.ContactDocument
 import com.devlhse.kotlinapi.model.ContactDto
 import com.devlhse.kotlinapi.service.ContactService
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,32 +16,30 @@ class ContactController {
     private lateinit var contactService: ContactService
 
     @Throws(UserNotFoundException::class)
-    @GetMapping("/contacts/{id}")
+    @GetMapping("/contacts/{id}", produces = ["application/json"])
     fun getContactById(@PathVariable("id") id: Long): ResponseEntity<ContactDto> {
         return ResponseEntity.ok().body(contactService.findOneContact(id))
     }
 
-    @GetMapping("/contacts")
+    @GetMapping("/contacts", produces = ["application/json"])
     fun getContacts(): ResponseEntity<List<ContactDto>> {
         return ResponseEntity.ok().body(contactService.findAllContacts())
     }
 
-    @PostMapping("/contacts")
-    fun createContact(@RequestBody contactDto: ContactDto): ResponseEntity<String> {
-        contactService.create(contactDto)
-        return ResponseEntity.created(URI("/contacts")).body("Inserted")
+    @PostMapping("/contacts", produces = ["application/json"], consumes = ["application/json"])
+    fun createContact(@RequestBody contactDto: ContactDto): ResponseEntity<ContactDocument> {
+        return ResponseEntity.created(URI("/contacts")).body(contactService.create(contactDto))
     }
 
-    @PutMapping("/contacts/{id}")
-    fun updateContact(@RequestBody contactDto: ContactDto, @PathVariable("id") id: Long): ResponseEntity<String> {
-        contactService.update(contactDto, id)
-        return ResponseEntity.ok().body("Updated")
+    @PutMapping("/contacts/{id}", produces = ["application/json"], consumes = ["application/json"])
+    fun updateContact(@RequestBody contactDto: ContactDto, @PathVariable("id") id: Long): ResponseEntity<ContactDocument> {
+        return ResponseEntity.ok().body(contactService.update(contactDto, id))
     }
 
     @Throws(UserNotFoundException::class)
     @DeleteMapping("/contacts/{id}")
     fun deleteContact(@PathVariable("id") id: Long): ResponseEntity<String> {
         contactService.delete(id)
-        return ResponseEntity.ok().body("Deleted")
+        return ResponseEntity.ok().body("")
     }
 }

@@ -1,5 +1,6 @@
 package com.devlhse.kotlinapi.model
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
@@ -15,6 +16,7 @@ data class ContactDto(
 
 @Document(collection = "contact")
 data class ContactDocument(
+        @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
         @Id var id:Long,
         var name:String,
         var email:String,
