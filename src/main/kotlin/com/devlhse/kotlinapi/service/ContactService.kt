@@ -1,94 +1,57 @@
 package com.devlhse.kotlinapi.service
 
+import com.devlhse.kotlinapi.component.ContactConversorComponent
 import com.devlhse.kotlinapi.exception.UserNotFoundException
 import com.devlhse.kotlinapi.model.ContactDocument
 import com.devlhse.kotlinapi.model.ContactDto
 import com.devlhse.kotlinapi.repository.ContactRepository
-import com.devlhse.kotlinapi.utils.DateUtils
-import org.joda.time.LocalDateTime
+import com.devlhse.kotlinapi.utils.DateTimeUtils
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.dao.EmptyResultDataAccessException
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+import java.util.*
+
 
 @Service
 class ContactService {
 
     @Autowired
+    private lateinit var contactConversorComponent: ContactConversorComponent
+
+    @Autowired
     private lateinit var contactRepository: ContactRepository
 
     @Throws(UserNotFoundException::class)
-    fun findOneContact(id: Long): ContactDto {
+    fun findOneContact(id: String): ContactDto {
         if(contactRepository.existsById(id)) {
             val contactDocument = contactRepository.findById(id)
-            return ContactDto(
-                    id = contactDocument.get().id,
-                    name = contactDocument.get().name,
-                    email = contactDocument.get().email,
-                    phoneNumber = contactDocument.get().phoneNumber,
-                    createdAt = DateUtils.toSimpleString(contactDocument.get().createdAt!!),
-                    updatedAt = DateUtils.toSimpleString(contactDocument.get().updatedAt!!)
-            )
+            return  contactConversorComponent.toContactDto(contactDocument.get())
         }
         throw UserNotFoundException("User not found.")
     }
 
-    fun findAllContacts(): List<ContactDto> {
-        val contacts = contactRepository.findAll()
-        var contactsDto: MutableList<ContactDto> = mutableListOf()
-        for (contactDocument in contacts){
-            var contactDto = ContactDto(
-                    contactDocument.id,
-                    contactDocument.name,
-                    contactDocument.email,
-                    contactDocument.phoneNumber,
-                    DateUtils.toSimpleString(contactDocument.createdAt!!),
-                    DateUtils.toSimpleString(contactDocument.updatedAt!!)
-            )
-            contactsDto.add(contactDto)
-        }
-        return contactsDto
+    fun findAllContacts(evalPage: Int, maxItensPerPage: Int): Page<ContactDocument> {
+        return contactRepository.findAll(PageRequest.of(evalPage, maxItensPerPage))
     }
 
-    fun create(contactDto: ContactDto): ContactDocument {
-        var lastContactDocument: ContactDocument
-        var nextId: Long = 0
-
-        try{
-            lastContactDocument = contactRepository.findFirstByOrderByIdDesc()
-            nextId = lastContactDocument.id
-            nextId++
-        }catch (e: EmptyResultDataAccessException){
-            nextId++
-        }
-
-        var contactDocument = ContactDocument(
-                id = nextId,
-                name = contactDto.name,
-                email = contactDto.email,
-                phoneNumber = contactDto.phoneNumber,
-                createdAt = LocalDateTime.now().toDate(),
-                updatedAt = LocalDateTime.now().toDate()
-        )
-        return contactRepository.insert(contactDocument)
+    fun create(contactDto: ContactDto): ContactDto {
+        val dateTimeNow = Date.from(java.time.ZonedDateTime.now().toInstant())
+        var contactDocument = contactConversorComponent.toContactDocument(UUID.randomUUID().toString(), contactDto, dateTimeNow)
+        return contactConversorComponent.toContactDto(contactRepository.save(contactDocument))
     }
 
-    fun update(contactDto: ContactDto, id: Long): ContactDocument {
+    fun update(contactDto: ContactDto, id: String): ContactDto {
         if(contactRepository.existsById(id)) {
             var contactDocument = contactRepository.findById(id)
-            var alteredContact = ContactDocument(
-                    id = id,
-                    name = contactDto.name,
-                    email = contactDto.email,
-                    phoneNumber = contactDto.phoneNumber,
-                    createdAt = contactDocument.get().createdAt,
-                    updatedAt = LocalDateTime.now().toDate())
-            return contactRepository.save(alteredContact)
+            var alteredContact = contactConversorComponent.toContactDocument(id, contactDto, contactDocument.get().createdAt!!)
+            return contactConversorComponent.toContactDto(contactRepository.save(alteredContact))
         }
         throw UserNotFoundException("User not found.")
     }
 
     @Throws(UserNotFoundException::class)
-    fun delete(id: Long) {
+    fun delete(id: String) {
         if(contactRepository.existsById(id)) {
             return contactRepository.deleteById(id)
         }

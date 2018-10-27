@@ -1,8 +1,7 @@
 package com.devlhse.kotlinapi.repository
 
 import com.devlhse.kotlinapi.model.ContactDocument
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.repository.PagingAndSortingRepository
 
-interface ContactRepository: MongoRepository<ContactDocument, Long> {
-     fun findFirstByOrderByIdDesc(): ContactDocument
+interface ContactRepository: PagingAndSortingRepository<ContactDocument, String> {
 }

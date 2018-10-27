@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 import java.util.*
 
 data class ContactDto(
-        var id:Long = 0,
+        var id:String?,
         var name:String,
         var email:String,
         var phoneNumber: String,
@@ -17,10 +17,10 @@ data class ContactDto(
 @Document(collection = "contact")
 data class ContactDocument(
         @JsonProperty(value = "id", access = JsonProperty.Access.READ_ONLY)
-        @Id var id:Long,
+        @Id var id:String = UUID.randomUUID().toString(),
         var name:String,
         var email:String,
         var phoneNumber: String,
-        val createdAt: Date? = null ,
+        val createdAt: Date? = null,
         val updatedAt: Date? = null
 )

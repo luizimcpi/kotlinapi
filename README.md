@@ -40,7 +40,8 @@ http://localhost:8080/contacts/{id}
 GET ALL CONTACTS EXAMPLE:
 
 ```
-http://localhost:8080/contacts
+http://localhost:8080/contacts?page=0
+*Maximum itens per page is 20.
 ```
 
 DELETE BY ID EXAMPLE:
