@@ -1,5 +1,9 @@
 spring:
   data:
+    #AWS
     #mongodb.uri: mongodb://user:password@publicip:27017/contacts
+    #localmongo
+    #mongodb.uri: mongodb://localhost:27017/contacts
+    #localmongo docker image
     mongodb.uri: mongodb://localhost:27016/contacts
     mongo.repositories.enabled: true
