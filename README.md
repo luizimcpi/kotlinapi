@@ -2,10 +2,25 @@
 API com Spring Boot e Kotlin
 
 # Run in Terminal
-gradle bootRun
+** IMPORTANT: You should install Docker and docker-compose on your pc
+*Run all the commands bellow inside the root directory of this project
 
-** IMPORTANT: You should install mongoDB on your pc
+First Time Configuration:
+==========================================
+Generate Docker Application Image:
+```
+docker build -t koltin-api .
+```
+Get mongodb image:
+```
+docker pull bitnami/mongodb:latest
+```
+==========================================
 
+Now start all enviroment:
+```
+docker-compose up
+```
 
 POST EXAMPLE:
 
