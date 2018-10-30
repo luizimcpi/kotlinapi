@@ -1,4 +1,4 @@
 spring:
   data:
-    mongodb.uri: mongodb://localhost:27016/contacts
+    mongodb.uri: mongodb://localhost:27017/contacts
     mongo.repositories.enabled: true

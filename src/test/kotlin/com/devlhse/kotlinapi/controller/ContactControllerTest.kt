@@ -12,6 +12,7 @@ import org.mockito.Mockito.`when`
 import org.mockito.junit.MockitoJUnitRunner
 import org.springframework.data.domain.PageImpl
 import java.time.ZonedDateTime
+import java.util.*
 
 
 @RunWith(MockitoJUnitRunner::class)
@@ -27,7 +28,7 @@ class ContactControllerTest {
     fun shouldShowAllContactsWithSuccess(){
         val validPage = 0
         val maxPagePerRequest = 20
-        val dateTimeNow = ZonedDateTime.now()
+        val dateTimeNow = Date()
         val contactDocument = ContactDocument(
                 id = "043d933c-cbba-4bf3-8aba-6f96bbed8e84",
                 name = "valid_user",
@@ -46,7 +47,6 @@ class ContactControllerTest {
 
     @Test
     fun shouldFindSpecificContactWithSuccess(){
-        val dateTimeNow = ZonedDateTime.now()
         val contactDto = ContactDto(
                 id = "043d933c-cbba-4bf3-8aba-6f96bbed8e84",
                 name = "valid_user",

@@ -5,11 +5,17 @@ API com Spring Boot e Kotlin
 ** IMPORTANT: You should install Docker and docker-compose on your pc
 ** Run all the commands bellow inside the root directory of this project
 
+
 First Time Configuration:
+
+Build
+```
+./gradlew build
+```
 
 Generate Docker Application Image:
 ```
-docker build -t koltin-api .
+docker build -t koltinapi .
 ```
 Get mongodb image:
 ```
