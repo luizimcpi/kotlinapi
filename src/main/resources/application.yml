@@ -1,4 +1,7 @@
 spring:
   data:
-    mongodb.uri: mongodb://localhost:27017/contacts
+    #mongodb docker configuration
+    mongodb.uri: mongodb://database:27017/contacts
+    #mongodb local configuration
+    #mongodb.uri: mongodb://localhost:27017/contacts
     mongo.repositories.enabled: true
